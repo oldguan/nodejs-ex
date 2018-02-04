@@ -31,10 +31,15 @@
         }
         var tryCallApp = function (scheme, downloadUrl) {
             var nowTime = new Date().valueOf();
-            window.location = scheme;//自己定义的scheme协议    
-
             if (browser.versions.ios) {
-                window.location = downloadUrl; //下载app页面
+                setTimeout(function () {
+                    var launchTime = new Date().valueOf() - nowTime;
+                    if (launchTime < 28) {     //28是调试估算出来的打开本地app基本需要的时间
+                        window.location = downloadUrl; //下载app页面
+                    }
+                }, 100);
+                window.location = scheme;//自己定义的scheme协议
+                
             } else {
                 setTimeout(function () {
                     var launchTime = new Date().valueOf() - nowTime;
@@ -42,6 +47,7 @@
                         window.location = downloadUrl; //下载app页面
                     }
                 }, 25);
+                window.location = scheme;//自己定义的scheme协议
             }
         }
         document.getElementById("btn").onclick = function () {
