@@ -9,7 +9,52 @@
 
 <body>
     <a href="javascript:;" id="btn" style="width:100px;height:100px;">button</a>
-    <script type="text/javascript" src="https://raw.githubusercontent.com/oldguan/nodejs-ex/master/views/index.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        var browser = {
+            versions: function () {
+                var u = navigator.userAgent, app = navigator.appVersion;
+                document.write(u);
+                return {   //移动终端浏览器版本信息
+                    trident: u.indexOf('Trident') > -1, //IE内核
+                    presto: u.indexOf('Presto') > -1, //opera内核
+                    webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
+                    gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
+                    mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
+                    ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
+                    android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
+                    iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
+                    iPad: u.indexOf('iPad') > -1, //是否iPad
+                    webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
+                };
+            }(),
+            language: (navigator.browserLanguage || navigator.language).toLowerCase()
+        }
+        var tryCallApp = function (scheme, downloadUrl) {
+            var nowTime = new Date().valueOf();
+            window.location = scheme;//自己定义的scheme协议    
+
+            if (browser.versions.ios) {
+                window.location = downloadUrl; //下载app页面
+            } else {
+                setTimeout(function () {
+                    var launchTime = new Date().valueOf() - nowTime;
+                    if (launchTime < 28) {     //28是调试估算出来的打开本地app基本需要的时间
+                        window.location = downloadUrl; //下载app页面
+                    }
+                }, 25);
+            }
+        }
+        document.getElementById("btn").onclick = function () {
+            var downloadUrl = "https://display.intdmp.com/site_login_ijf.htm?app_key=adhuae14a25b11a84bb6&user_id=not_login&sign=afd54be204e68ea073728e89e372f2ad";
+            var url = "vipshop://showChannel?channelID=%23top-beauty&channelMenu=0&tra_from=tra%3AC01V4kqlvjozum7h%3A%3Awpxlxckx%3A887051%3A1994b9c392434d63b0c4069b13971768";
+
+            tryCallApp(url, downloadUrl);
+
+            return false;
+        }
+
+
+    </script>
 </body>
 
 </html>
